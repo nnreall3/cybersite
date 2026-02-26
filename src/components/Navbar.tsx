@@ -1,4 +1,5 @@
 import { useI18n } from "@/lib/i18n";
+import { languageNames, Language } from "@/lib/translations";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Shield } from "lucide-react";
@@ -6,7 +7,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
-  const { t } = useI18n();
+  const { t, lang, setLang } = useI18n();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const links = [
@@ -58,9 +59,23 @@ const Navbar = () => {
                 {l.label}
               </a>
             ))}
-            <div className="flex items-center justify-between pt-2 border-t border-border">
-              <LanguageSwitcher />
-              <ThemeToggle />
+            <div className="flex flex-col gap-2 pt-2 border-t border-border">
+              <div className="flex flex-wrap gap-1">
+                {(["en", "ar", "darija"] as const).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => { setLang(l); setMobileOpen(false); }}
+                    className={`rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                      l === lang ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    {languageNames[l]}
+                  </button>
+                ))}
+              </div>
+              <div className="flex justify-end">
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </div>
